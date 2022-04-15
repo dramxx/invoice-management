@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const authRoute = require('./routes/auth/auth');
+const companyRoute = require('./routes/company');
+const customerRoute = require('./routes/customer');
 
 /**
  * Launch server
@@ -23,11 +25,20 @@ mongoose.connect(
 );
 
 /**
- * Middleware: disabling cors, using Json output
+ * Middleware
+ *
+ * disabling cors
+ * using Json output
  */
 app.use(express.json(), cors());
 
 /**
- * Route middleware
+ * Routes
+ *
+ * authentication ( login, register )
+ * companies ( create company, list all companies )
+ * customers ( create user, list all users )
  */
 app.use('/api/users', authRoute);
+app.use('/api/companies', companyRoute);
+app.use('/api/customers', customerRoute);

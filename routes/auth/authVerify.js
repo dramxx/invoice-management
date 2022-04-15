@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 /**
- * Verifies, if user has jwt token to access the route: 
+ * Verifies, if user has jwt token to access the route
  */
 module.exports = (req, res, next) => {
   const token = req.header("auth-token");
