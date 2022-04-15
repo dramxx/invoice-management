@@ -39,7 +39,7 @@ router.post('/register', async (req, res) => {
     password: hashedPassword,
   });
 
-  // Validates user input and eventually saves new user to Mongo db: 
+  // Validates user input and eventually saves new user to Mongo db:
   // TODO: custom Joi error messages
   try {
     const {error} = await registerSchema.validateAsync(req.body);
@@ -58,29 +58,32 @@ router.post('/register', async (req, res) => {
 /**
  * Login user
  */
- router.post("/login", async (req, res) => {
+router.post('/login', async (req, res) => {
 
   // Checks, if user email already exists:
   const user = await User.findOne({email: req.body.email});
   if (!user) return res.status(400).send('incorrect email');
 
-  // Checks, if user password matches the database: 
+  // Checks, if user password matches the database:
   const validPassword = await bcrypt.compare(
-    req.body.password, 
-    user.password
-  )
+      req.body.password,
+      user.password,
+  );
   if (!validPassword) return res.status(400).send('incorrect password');
 
+  // Validates user input and sends back jwt token
   try {
     const {error} = await loginSchema.validateAsync(req.body);
     if (error) {
       res.status(400).send(error.details[0].message);
     } else {
-      res.status(200).send(`login success, ${req.body.email}`)
+      const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
+
+      res.header('auth-token', token).send(token);
     }
   } catch (error) {
-    res.status(500).send(error)
+    res.status(500).send(error);
   }
- });
+});
 
 module.exports = router;
