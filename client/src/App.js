@@ -1,13 +1,8 @@
-import React, {useEffect} from 'react';
-import axios from 'axios';
+import React from 'react';
 import './App.css';
 import Layout from './Components/Layout';
 
 const App = () => {
-
-  useEffect(() => {
-    axios.get('/api').then((response) => console.log(response.data)).catch((error) => console.error(error));
-  }, []);
 
   return (
       <div className="App">
